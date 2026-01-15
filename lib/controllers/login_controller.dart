@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:wikictg/chamadas/gera_token.dart';
+import 'package:wikictg/sharedpreferences/salva_token.dart';
 
 class LoginController {
   ValueNotifier<bool> inLoader = ValueNotifier<bool>(false);
-
+  String? token;
   String? _login;
   String? _password;
 
@@ -15,14 +17,19 @@ class LoginController {
   }
 
   Future<bool> login() async {
-    inLoader.value = true;
-    
-    await Future.delayed(Duration(seconds: 2));
 
+    if (_login == null || _password == null) {
+      return false;
+    }
+
+
+    inLoader.value = true;
+    token = await geraToken(_login!, _password!);
     inLoader.value = false;
 
-    // Dummy authentication logic
-    if (_login == 'user' && _password == 'senha') {
+
+    if (token!.isNotEmpty) {
+      await salvarToken(token!);
       return true;
     } else {
       return false;
