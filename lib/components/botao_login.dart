@@ -11,28 +11,23 @@ class BotaoLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: controller.inLoader, 
-      builder: (_, inLoader, _) => inLoader ? CircularProgressIndicator() : ElevatedButton(
-        onPressed: () {
+      builder: (_, inLoader, _) => inLoader ? CircularProgressIndicator() : 
+      ElevatedButton(
+        onPressed: () => {
           controller.login().then(
             (result){
               if(result){
-                //Navigator.pushReplacementNamed(context, '/home');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Login realizado com sucesso!'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Login ou senha incorretos!'),
                     duration: Duration(seconds: 2),
-                  ),
+                  ),  
                 );
               }
             }
-          );
+          )
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.yellow.shade700,

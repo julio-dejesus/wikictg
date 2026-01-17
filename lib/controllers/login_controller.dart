@@ -6,14 +6,12 @@ class LoginController {
   ValueNotifier<bool> inLoader = ValueNotifier<bool>(false);
   String? token;
   String? _login;
-  String? _password;
-
-  void setLogin(String login) {
+    void setLogin(String login) {
     _login = login;
   }
-
+  String? _password;
   void setPassword(String password) {
-    _password = password;
+    _password = password; 
   }
 
   Future<bool> login() async {
