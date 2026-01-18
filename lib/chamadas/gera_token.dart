@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
+
 
 Future<String> geraToken(String login, String password) async{
 
@@ -20,7 +22,7 @@ try{
     return "";
   }
 }catch(e){
-  print(e);
+  Logger().e("Erro ao gerar token: $e");
   return "";
 }
 
