@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wikictg/pages/home_page.dart';
 import 'package:wikictg/pages/login_page.dart';
 import 'package:wikictg/sharedpreferences/consulta_token.dart';
@@ -44,12 +45,29 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow.shade700),
-          backgroundColor: Colors.yellow.shade100,
-        ),
-    )
+      body: Container(
+        color: Colors.yellow.shade100,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow.shade700),
+                backgroundColor: Colors.yellow.shade100,
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Inicializando o servidor...',
+                style: GoogleFonts.cinzel(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+            ),
+      )
     );
   }
 }

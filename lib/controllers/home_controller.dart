@@ -13,4 +13,9 @@ class HomeController {
     posts.value = List<EntidadeModel>.from(lista);
   }
 
+  fetchComFiltro(Map<String, dynamic> filtros) async {
+    final lista = await _homeRepository.getListaComFiltro(filtros);
+    posts.value = List<EntidadeModel>.from(lista);
+  }
+
 }

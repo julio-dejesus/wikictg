@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wikictg/chamadas/entidades_filtros.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:wikictg/regras/converter_data.dart';
+import 'package:wikictg/regras/verifica_token.dart';
 
 class FiltroPage extends StatefulWidget {
   const FiltroPage({super.key});
@@ -11,6 +14,10 @@ class FiltroPage extends StatefulWidget {
 
 class _FiltroPageState extends State<FiltroPage> {
   final Map<String, dynamic> _filtro = {};
+  final dataMask = MaskTextInputFormatter(
+    mask: '##/##/####',
+    filter: { "#": RegExp(r'[0-9]') },
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +86,8 @@ class _FiltroPageState extends State<FiltroPage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.4,
                   child: TextField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [dataMask],
                     style: GoogleFonts.cinzel(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -97,7 +106,7 @@ class _FiltroPageState extends State<FiltroPage> {
                     //   firstDate: DateTime(1800),
                     //   lastDate: DateTime.now(),
                     // ),
-                    onChanged: (value) => _filtro['fundado'] = value,
+                    onChanged: (value) => _filtro['fundado'] = ConverterData.estiloAmericano(dataMask.getUnmaskedText())
                   ),
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03),
@@ -170,7 +179,15 @@ class _FiltroPageState extends State<FiltroPage> {
                 ),
               ),
               onPressed: () {
-                EntidadesFiltros(_filtro);
+                if(verificaToken()){
+                Navigator.pop(context, _filtro);
+                }else{
+                  CupertinoAlertDialog(
+                    title: Text("Erro no Token!"),
+                    content: Text("Usuário não tem permissão ou token expirou."),
+                    actions: [Text("Ok")],
+                  );
+                }
               },
               child: Text(
                 'Filtrar',
