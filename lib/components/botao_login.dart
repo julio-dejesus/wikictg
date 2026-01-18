@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wikictg/controllers/login_controller.dart';
 
@@ -13,9 +12,11 @@ class BotaoLogin extends StatelessWidget {
       valueListenable: controller.inLoader, 
       builder: (_, inLoader, _) => inLoader ? CircularProgressIndicator() : 
       ElevatedButton(
-        onPressed: () => {
-          controller.login().then(
-            (result){
+        onPressed: () async {
+          final result = await controller.login();
+
+            if (!context.mounted) return;
+
               if(result){
                 Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
               } else {
@@ -26,9 +27,7 @@ class BotaoLogin extends StatelessWidget {
                   ),  
                 );
               }
-            }
-          )
-        },
+            },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.yellow.shade700,
           textStyle: GoogleFonts.cinzel(

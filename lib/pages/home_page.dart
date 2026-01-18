@@ -1,15 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wikictg/controllers/home_controller.dart';
 import 'package:wikictg/models/entidade_model.dart';
-import 'package:wikictg/regras/verifica_token.dart';
 import 'package:wikictg/repositories/lista_repository_imp.dart';
-import 'package:wikictg/sharedpreferences/consulta_token.dart';
 
 class HomePage extends StatefulWidget{
 
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wikictg/models/entidade_model.dart';
 import 'package:wikictg/regras/converter_data.dart';
 import 'package:wikictg/regras/verifica_token.dart';
-import 'package:wikictg/sharedpreferences/consulta_token.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});

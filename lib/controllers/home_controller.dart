@@ -8,12 +8,12 @@ class HomeController {
 
   ValueNotifier<List<EntidadeModel>> posts = ValueNotifier<List<EntidadeModel>>([]);
 
-  fetch() async {
+  Future<void> fetch() async {
     final lista = await _homeRepository.getLista();
     posts.value = List<EntidadeModel>.from(lista);
   }
 
-  fetchComFiltro(Map<String, dynamic> filtros) async {
+  Future<void> fetchComFiltro(Map<String, dynamic> filtros) async {
     final lista = await _homeRepository.getListaComFiltro(filtros);
     posts.value = List<EntidadeModel>.from(lista);
   }

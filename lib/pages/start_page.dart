@@ -22,8 +22,7 @@ class _StartPageState extends State<StartPage> {
   Future<void> _verificarSessao() async {
     final token = await obterTokenValido();
 
-    final response = await http.get(Uri.parse('https://tradicionalapi.onrender.com/usoSistema'));
-    print(response.body);
+    await http.get(Uri.parse('https://tradicionalapi.onrender.com/usoSistema'));
 
     if (!mounted) return;
 
