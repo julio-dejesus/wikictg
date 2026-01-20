@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/web.dart';
+import 'package:wikictg/controllers/add_controller.dart';
 
-class AdicionaEntidade extends StatefulWidget {
-  const AdicionaEntidade({super.key});
+class AdicionaEntidade extends StatelessWidget {
+  final AddController controller = AddController();
+  AdicionaEntidade({super.key});
 
-  @override
-  State<AdicionaEntidade> createState() => _AdicionaEntidadeState();
-}
-
-class _AdicionaEntidadeState extends State<AdicionaEntidade> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +48,7 @@ class _AdicionaEntidadeState extends State<AdicionaEntidade> {
                     fontWeight: FontWeight.bold
                   ),
                     ),
+                  onChanged: controller.setSigla,
                   )
                   )
               ],
@@ -71,6 +70,7 @@ class _AdicionaEntidadeState extends State<AdicionaEntidade> {
                   width: MediaQuery.of(context).size.width / 3,
                   height: 20,
                   child: TextField(
+                    onChanged: controller.setNome,
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
                     fontSize: 18,
@@ -99,6 +99,7 @@ class _AdicionaEntidadeState extends State<AdicionaEntidade> {
                   width: MediaQuery.of(context).size.width / 3,
                   height: 20,
                   child: TextField(
+                    onChanged: controller.setFundado,
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
                     fontSize: 18,
@@ -127,6 +128,7 @@ class _AdicionaEntidadeState extends State<AdicionaEntidade> {
                   width: MediaQuery.of(context).size.width / 3,
                   height: 20,
                   child: TextField(
+                    onChanged: controller.setFundado,
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
                     fontSize: 18,
@@ -155,6 +157,7 @@ class _AdicionaEntidadeState extends State<AdicionaEntidade> {
                   width: MediaQuery.of(context).size.width / 3,
                   height: 20,
                   child: TextField(
+                    onChanged: controller.setCidade,
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
                     fontSize: 18,
@@ -183,6 +186,7 @@ class _AdicionaEntidadeState extends State<AdicionaEntidade> {
                   width: MediaQuery.of(context).size.width / 3,
                   height: 20,
                   child: TextField(
+                    onChanged: controller.setEndereco,
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
                     fontSize: 18,
@@ -197,7 +201,7 @@ class _AdicionaEntidadeState extends State<AdicionaEntidade> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             ElevatedButton(
               onPressed: () {
-                
+                Logger().i(controller.testeEntidade()); 
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow.shade700,

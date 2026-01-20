@@ -1,6 +1,9 @@
 class ConverterData {
   
   static String estiloAmericano(String data){
+        if (data.length < 8) {
+      return data;
+    }
     String dia = data.substring(0, 2);
     String mes = data.substring(2, 4);
     String ano = data.substring(4, 8);

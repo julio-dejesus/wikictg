@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:logger/web.dart';
+import 'package:wikictg/regras/converter_data.dart';
 
 class AddController {
   ValueNotifier<bool> inLoader = ValueNotifier<bool>(false);
@@ -33,9 +38,35 @@ class AddController {
     _endereco = endereco;
   }
 
-  Future<String> addEntidade() async {
+  String testeEntidade(){
+    return "sigla: $_sigla, nome: $_nome, fundado: $_fundado, rt: $_rt, cidade: $_cidade, endereco: $_endereco";
+  }
 
-    return "";
+  Future<String> addEntidade() async {
+    try{
+      final response = await http.post(
+        Uri.parse("https://tradicionalapi.onrender.com/cadastroEntidades"),
+        body: jsonEncode({
+          "sigla": _sigla,
+          "nome": _nome,
+          "fundado": ConverterData.estiloAmericano(_fundado!),
+          "rt": _rt,
+          "cidade": _cidade,
+          "endereco": _endereco
+        }),
+        headers: {'Content-Type': 'application/json'}
+      );
+
+      final data = jsonDecode(response.body);
+      if(data['inseridas'] > 0){
+        return "Sucesso.";
+      }else{
+        return "";
+      }
+    }catch(e){
+      Logger().e("Erro ao adicionar entidade: $e");
+      return "";
+    }
   }
 
 }

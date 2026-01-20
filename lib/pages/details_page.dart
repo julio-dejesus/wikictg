@@ -53,13 +53,13 @@ class _DetailsPageState extends State<DetailsPage> {
                         child: Text("Excluir"),
                         onPressed: () {
                           Navigator.pop(context);
+                          Logger().i("Entidade ${entidade.id} foi deletada");
                         },
                       ),
                     ],
                       );
                     }
                     );
-                  //Logger().i("Entidade ${entidade.id} foi deletada");
                 }, 
                 icon: Icon(Icons.delete),
                 ),
