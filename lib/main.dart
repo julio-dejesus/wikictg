@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wikictg/pages/adiciona_entidade.dart';
 import 'package:wikictg/pages/details_page.dart';
 import 'package:wikictg/pages/filtro_page.dart';
 import 'package:wikictg/pages/home_page.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         '/filtro': (context) => FiltroPage(),
         '/details': (context) => DetailsPage(),
+        '/addEntidade' : (context) => AdicionaEntidade(),
       },
       title: 'Wiki CTG',
       debugShowCheckedModeBanner: false,

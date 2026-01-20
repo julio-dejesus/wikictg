@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/web.dart';
 import 'package:wikictg/models/entidade_model.dart';
 import 'package:wikictg/regras/converter_data.dart';
 import 'package:wikictg/regras/verifica_token.dart';
@@ -13,6 +15,7 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   EntidadeModel get entidade => ModalRoute.of(context)!.settings.arguments as EntidadeModel;
+  bool editavel = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +33,38 @@ class _DetailsPageState extends State<DetailsPage> {
           Visibility(
             visible: verificaToken(),
             child: Padding(
-              padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+              padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03),
               child: IconButton(
-                onPressed: () => {
-              
+                onPressed: () {
+                  showDialog(
+                    context: context, 
+                    builder: (context){
+                      return CupertinoAlertDialog(
+                    title: Text("Confirmar exclusão"),
+                    content: Text("Deseja excluir definitivamente a entidade ${entidade.sigla} ${entidade.nome}"),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text("Cancelar"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      CupertinoDialogAction(
+                        child: Text("Excluir"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                      );
+                    }
+                    );
+                  //Logger().i("Entidade ${entidade.id} foi deletada");
                 }, 
-                icon: Icon(Icons.edit),
+                icon: Icon(Icons.delete),
                 ),
             ),
-          )
+          ),
         ],
       ),
       body: Container(
@@ -57,7 +83,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     fontWeight: FontWeight.bold
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.1,),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 Text(
                   "Nome: ${entidade.nome}",
                   style: GoogleFonts.cinzel(
@@ -80,7 +106,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     fontWeight: FontWeight.bold
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.1,),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 Text(
                   "RT: ${entidade.rt}",
                   style: GoogleFonts.cinzel(
@@ -91,7 +117,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -105,7 +131,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Row(
                mainAxisAlignment: MainAxisAlignment.center,
               children: [

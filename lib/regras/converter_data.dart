@@ -9,6 +9,9 @@ class ConverterData {
   }
 
   static String estiloBr(String data){
+    if (data.length < 8) {
+      return data;
+    }
     String ano = data.substring(0, 4);
     String mes = data.substring(5, 7);
     String dia = data.substring(8, 10);

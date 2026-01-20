@@ -92,7 +92,16 @@ class _HomePageState extends State<HomePage> {
               );
           },
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.yellow.shade700,
+        foregroundColor: Colors.black,
+        shape: CircleBorder(),
+        onPressed: () {
+          Navigator.pushNamed(context, "/addEntidade");
+        },
+        child: Icon(Icons.add)
+        ),
     );
   }
 }
