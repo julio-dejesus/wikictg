@@ -1,11 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/web.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:wikictg/controllers/add_controller.dart';
 
-class AdicionaEntidade extends StatelessWidget {
+class AdicionaEntidade extends StatefulWidget {
+
+  const AdicionaEntidade({super.key});
+
+  @override
+  State<AdicionaEntidade> createState() => _AdicionaEntidadeState();
+}
+
+class _AdicionaEntidadeState extends State<AdicionaEntidade> {
   final AddController controller = AddController();
-  AdicionaEntidade({super.key});
+  bool isLoading = false;
+  final dataMask = MaskTextInputFormatter(mask: '##/##/####', filter: { "#": RegExp(r'[0-9]') },);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +51,6 @@ class AdicionaEntidade extends StatelessWidget {
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
-                  height: 20,
                   child: TextField(
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
@@ -48,6 +59,11 @@ class AdicionaEntidade extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   ),
                     ),
+                  style: GoogleFonts.cinzel(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),
                   onChanged: controller.setSigla,
                   )
                   )
@@ -68,7 +84,6 @@ class AdicionaEntidade extends StatelessWidget {
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
-                  height: 20,
                   child: TextField(
                     onChanged: controller.setNome,
                     decoration: InputDecoration(
@@ -78,6 +93,11 @@ class AdicionaEntidade extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   ),
                     ),
+                   style: GoogleFonts.cinzel(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),
                   )
                   )
               ],
@@ -97,16 +117,21 @@ class AdicionaEntidade extends StatelessWidget {
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
-                  height: 20,
                   child: TextField(
                     onChanged: controller.setFundado,
+                    inputFormatters: [dataMask],
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
                     fontSize: 18,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
                   ),
                     ),
+                   style: GoogleFonts.cinzel(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),
                   )
                   )
               ],
@@ -126,9 +151,9 @@ class AdicionaEntidade extends StatelessWidget {
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
-                  height: 20,
                   child: TextField(
-                    onChanged: controller.setFundado,
+                    onChanged:(value){ controller.setRt(int.parse(value)); },
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.cinzel(
                     fontSize: 18,
@@ -136,6 +161,11 @@ class AdicionaEntidade extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   ),
                     ),
+                   style: GoogleFonts.cinzel(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),
                   )
                   )
               ],
@@ -155,7 +185,6 @@ class AdicionaEntidade extends StatelessWidget {
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
-                  height: 20,
                   child: TextField(
                     onChanged: controller.setCidade,
                     decoration: InputDecoration(
@@ -165,6 +194,11 @@ class AdicionaEntidade extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   ),
                     ),
+                   style: GoogleFonts.cinzel(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),
                   )
                   )
               ],
@@ -184,7 +218,6 @@ class AdicionaEntidade extends StatelessWidget {
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
-                  height: 20,
                   child: TextField(
                     onChanged: controller.setEndereco,
                     decoration: InputDecoration(
@@ -194,14 +227,45 @@ class AdicionaEntidade extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   ),
                     ),
+                   style: GoogleFonts.cinzel(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),
                   )
                   ) 
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             ElevatedButton(
-              onPressed: () {
-                Logger().i(controller.testeEntidade()); 
+              onPressed: isLoading
+              ? null
+              : () async {
+                setState(() {
+                  isLoading = true;
+                });
+                Logger().i(controller.testeEntidade());
+                final result = await controller.addEntidade();
+                Logger().i("Tentativa de cadastro: $result");
+                setState(() {
+                  isLoading = false;
+                });
+                showCupertinoDialog(
+                  context: context, 
+                  builder: (context){
+                    return CupertinoAlertDialog(
+                      title: Text("Atenção"),
+                      content: Text(result),
+                      actions: [CupertinoDialogAction(
+                        child: Text("Ok"),
+                        onPressed: () {
+                           Navigator.pop(context);
+                           Navigator.pop(context);
+                        }
+                        )],
+                    );
+                  }
+                  );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow.shade700,
@@ -211,7 +275,16 @@ class AdicionaEntidade extends StatelessWidget {
                   color: Colors.black
                 ),
               ),
-              child: Text(
+              child: isLoading
+               ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: Colors.black,
+                ),
+               )
+               : Text(
                 "Adicionar",
                 style: GoogleFonts.cinzel(
                     fontSize: 18,

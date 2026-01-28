@@ -182,11 +182,21 @@ class _FiltroPageState extends State<FiltroPage> {
                 if(verificaToken()){
                 Navigator.pop(context, _filtro);
                 }else{
-                  CupertinoAlertDialog(
-                    title: Text("Erro no Token!"),
-                    content: Text("Usuário não tem permissão ou token expirou."),
-                    actions: [Text("Ok")],
-                  );
+                  showCupertinoDialog(
+                    context: context, 
+                    builder: (context){
+                      return CupertinoAlertDialog(
+                                title: Text("Erro no Token!"),
+                                content: Text("Usuário não tem permissão ou token expirou."),
+                                actions: [CupertinoDialogAction(
+                                  child: Text("Ok"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  )],
+                              );
+                    }
+                    );
                 }
               },
               child: Text(

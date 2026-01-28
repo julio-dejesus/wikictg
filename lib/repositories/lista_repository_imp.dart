@@ -19,6 +19,17 @@ class ListaRepositoryImp extends ListaRepository{
     }
   }
 
+  Future<List<EntidadeModel>> getListaVerificar() async{
+    try{
+      var response = await http.get(Uri.parse('https://tradicionalapi.onrender.com/entidadesVerificar'));
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((e) => EntidadeModel.fromJson(e)).toList();
+    }
+    catch(e){
+      throw Exception('Erro ao buscar lista de entidades não verificadas: $e');
+    }
+  }
+
   Future<List<EntidadeModel>> getListaComFiltro(Map<String, dynamic> filtros) async{
     try{
       final uri = Uri.parse('https://tradicionalapi.onrender.com/procuraEntidades').replace(

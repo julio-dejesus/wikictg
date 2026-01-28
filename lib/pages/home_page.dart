@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:wikictg/controllers/home_controller.dart';
 import 'package:wikictg/models/entidade_model.dart';
 import 'package:wikictg/repositories/lista_repository_imp.dart';
+import 'package:wikictg/sharedpreferences/consulta_usuario.dart';
 
 class HomePage extends StatefulWidget{
 
@@ -12,16 +14,17 @@ class HomePage extends StatefulWidget{
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>{
   late HomeController _controller;
-  
+  bool filtroVerificar = false;
+  bool admin = false;
 
   @override
   void initState() {
     super.initState();
     _controller = HomeController(ListaRepositoryImp());
     _controller.fetch();
-    
+    puxaUsuario();
   }
 
   void abrirFiltro() async{
@@ -32,6 +35,14 @@ class _HomePageState extends State<HomePage> {
     else{
       _controller.fetch();
     }
+  }
+
+  Future<void> puxaUsuario() async{
+    final isAdmin = await usuarioEhAdmin();
+    setState(() {
+      admin = isAdmin;
+    });
+    Logger().i("Usuário é admin: $admin");
   }
 
   @override
@@ -48,6 +59,24 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         backgroundColor: Colors.yellow.shade700,
         foregroundColor: Colors.black,
+        leading: Visibility(
+          visible: admin,
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                filtroVerificar = !filtroVerificar;
+                if(filtroVerificar){
+                  _controller.fetchParaVerificar();
+                }else{
+                  _controller.fetch();
+                }
+              });
+            }, 
+            icon: filtroVerificar
+            ? Icon(Icons.home)
+            : Icon(Icons.remove_red_eye_rounded)
+            ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.filter_alt_rounded),

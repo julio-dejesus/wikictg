@@ -18,4 +18,9 @@ class HomeController {
     posts.value = List<EntidadeModel>.from(lista);
   }
 
+  Future<void> fetchParaVerificar() async{
+    final lista = await _homeRepository.getListaVerificar();
+    posts.value = List<EntidadeModel>.from(lista);
+  }
+
 }

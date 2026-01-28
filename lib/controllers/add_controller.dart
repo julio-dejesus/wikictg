@@ -56,16 +56,16 @@ class AddController {
         }),
         headers: {'Content-Type': 'application/json'}
       );
-
+      Logger().i("Valor da variavel: $_fundado, valor convertido: ${ConverterData.estiloAmericano(_fundado!)}");
       final data = jsonDecode(response.body);
-      if(data['inseridas'] > 0){
+      if(data['inseridas']?.length > 0){
         return "Sucesso.";
       }else{
-        return "";
+        return "Erro na validação de linhas inseridas";
       }
-    }catch(e){
-      Logger().e("Erro ao adicionar entidade: $e");
-      return "";
+    }catch(e, s){
+      Logger().e("Erro ao adicionar entidade: ", error: e, stackTrace: s);
+      return "Erro ao adicionar entidade";
     }
   }
 
